@@ -2,8 +2,9 @@ import sys
 sys.path.append('../')
 
 from keybert import KeyBERT
-import spacy
 import stanza
+import random
+random.seed(42)
 
 class KeyBERTAnswerExtractor:
     def __init__(self, agent_name):
@@ -11,31 +12,46 @@ class KeyBERTAnswerExtractor:
         self.key_model = KeyBERT()
         print("KeyBERT answer extractor was successfully created.")
 
-    def extract_answers(self, passage, ngram_range, stop_words):
-        keywords = self.key_model.extract_keywords(passage, keyphrase_ngram_range=(ngram_range[0], ngram_range[1]), stop_words=stop_words)
-        if isinstance(keywords, list) and len(keywords) > 0:
-            if isinstance(keywords[0], tuple) and len(keywords[0]) == 2:
-                top_keywords = keywords[0][0]
-                return top_keywords
-            else:
-                print("Error.")
-                return -1
+    def extract_answers(self, passage, ngram_range, stop_words, max_answers):
+        if max_answers > 20:
+            max_answers = 20
+        keywords = self.key_model.extract_keywords(passage, keyphrase_ngram_range=(ngram_range[0], ngram_range[1]), stop_words=stop_words, use_mmr=True, diversity=0.7, nr_candidates=20, top_n=max_answers)
+        if isinstance(keywords, list) and len(keywords) > 0 and len(keywords) <= max_answers:
+            return keywords
+        elif isinstance(keywords, list) and len(keywords) > max_answers:
+            return random.sample(keywords, max_answers)
         else:
-            print("No Keywords.")
-            return -1
+            return []
 
     def getAgentType(self):
-        return 'ner'
+        return 'bert'
 
 class NerAnswerExtractor:
     def __init__(self, agent_name):
         self.agent_name = agent_name
-        self.nlp = stanza.Pipeline(lang='en', processors='tokenize,ner')
         stanza.download('en')
+        self.nlp = stanza.Pipeline(lang='en', processors='tokenize,ner')
 
-    def extract_answer(self, text):
+    def extract_answers(self, text, max_answers, remove_duplicates):
         doc = self.nlp(text)
-        return doc.ents
+        if remove_duplicates:
+            doc.ents = self.remove_duplicates(doc.ents)
+        if len(doc.ents) > 0 and len(doc.ents) <= max_answers:
+            return doc.ents
+        elif len(doc.ents) > max_answers:
+            return random.sample(doc.ents, max_answers)
+        else:
+            return []
+
+    #https://stackoverflow.com/questions/43319409/remove-duplicates-key-from-list-of-dictionaries-python
+    def remove_duplicates(self, doc_ents):
+        done = set()
+        result = []
+        for d in doc_ents:
+            if d.text not in done:
+                done.add(d.text)  # note it down for further iterations
+                result.append(d)
+        return result
 
     def getAgentType(self):
         return 'ner'
