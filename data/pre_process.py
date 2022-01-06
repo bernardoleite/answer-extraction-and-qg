@@ -16,10 +16,12 @@ for document in test_data:
         paragraph_text = para["context"]
         para_all_compiled.append({'paragraph_id': paragraph_id, 'paragraph_text': paragraph_text})
 
-print("Json completed.")
-print("Number of unique paragraphs: ", len(para_all_compiled))
+print("JSON file is ready.")
+print("Number of unique paragraphs:", len(para_all_compiled))
 
 # Save json to json file
 # https://stackoverflow.com/questions/12309269/how-do-i-write-json-data-to-a-file
 with open('paragraphs.json', 'w', encoding='utf-8') as file:
     json.dump(para_all_compiled, file)
+
+print("JSON file was saved as paragraphs.json.")

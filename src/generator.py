@@ -42,5 +42,12 @@ class Generator:
             self.tokenizer.decode(generated_id, skip_special_tokens=True, clean_up_tokenization_spaces=True)
             for generated_id in generated_ids
         }
-        
-        return ''.join(preds)
+
+        questions = []
+        if isinstance(preds, set):
+            for elem in preds:
+                questions.append(elem)
+        else:
+            questions.append(''.join(preds))
+
+        return questions

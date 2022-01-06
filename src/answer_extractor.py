@@ -30,7 +30,7 @@ class NerAnswerExtractor:
     def __init__(self, agent_name):
         self.agent_name = agent_name
         stanza.download('en')
-        self.nlp = stanza.Pipeline(lang='en', processors='tokenize,ner')
+        self.nlp = stanza.Pipeline(lang='en', processors='tokenize,ner', use_gpu=True)
 
     def extract_answers(self, text, max_answers, remove_duplicates):
         doc = self.nlp(text)
