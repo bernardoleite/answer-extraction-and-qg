@@ -7,7 +7,7 @@ from models import T5FineTuner
 
 import argparse
 import json
-
+import torch
 import random
 random.seed(42)
 
@@ -29,12 +29,18 @@ def run(args):
     # Load T5 fine-tuned model for QG
     checkpoint_path = args.checkpoint_path
     qgmodel = T5FineTuner.load_from_checkpoint(checkpoint_path, hparams=params, t5model=t5_model, t5tokenizer=t5_tokenizer)
+
+    # Put model in gpu (if possible) or cpu (if not possible) for inference purpose
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    qgmodel = qgmodel.to(device)
+    print ("Device for inference: ",device)
+
+    # Put model in freeze() and eval() model. Not sure the purpose of freeze
     qgmodel.freeze()
     qgmodel.eval()
 
     # Create agent for question generation
     agent_gen = Generator(qgmodel, t5_tokenizer)
-
 
     # Load json files
     with open(args.paragraphs_path, encoding='utf-8') as file:
