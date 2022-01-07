@@ -42,9 +42,10 @@ def run(args):
     with open("../output/answers/" + args.paragraphs_answers_path + "paragraphs_answers.json", encoding='utf-8') as file:
         paragraphs_answers = json.load(file)
 
-    #paragraphs_answers = random.sample(paragraphs_answers, 5) # to remove!!!!!!!!!!!!!!!!!
+    #paragraphs_answers = random.sample(paragraphs_answers, 15) # to remove!!!!!!!!!!!!!!!!!
 
     # Generate questions
+    printcounter = 0
     paragraphs_answers_questions = []
     for elem in paragraphs_answers:
         questions = agent_gen.generate(elem['paragraph_text'], elem['answer_text'], args.max_len_input, args.max_len_output, args.num_beams, args.num_return_sequences)
@@ -57,6 +58,10 @@ def run(args):
                 'answer_subtype': elem['answer_subtype'],
                 'gen_question': quest}
                 )
+        if (printcounter == 400):
+            print(str(printcounter) + " paragraphs have been processed.")
+            printcounter = 0
+        printcounter += 1
 
     # Save paragraphs and answers to json file
 
