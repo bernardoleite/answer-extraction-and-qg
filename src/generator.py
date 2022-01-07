@@ -14,7 +14,7 @@ class Generator:
         self.tokenizer = tokenizer
         print("Generator was created.")
 
-    def generate(self, passage, answer_text, max_len_input, max_len_output, num_beams, num_return_sequences):
+    def generate(self, passage, answer_text, max_len_input, max_len_output, num_beams, num_return_sequences, device):
         source_encoding = self.tokenizer(
             answer_text,
             passage,
@@ -26,9 +26,13 @@ class Generator:
             return_tensors='pt'
         )
 
+        # Put this in GPU (faster than using cpu)
+        input_ids = source_encoding['input_ids'].to(device)
+        attention_mask = source_encoding['attention_mask'].to(device)
+
         generated_ids = self.qgmodel.model.generate(
-            input_ids=source_encoding['input_ids'],
-            attention_mask=source_encoding['attention_mask'],
+            input_ids=input_ids,
+            attention_mask=attention_mask,
             num_return_sequences=num_return_sequences, # defaults to 1
             num_beams=num_beams, # defaults to 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! myabe experiment with 5
             max_length=max_len_output,

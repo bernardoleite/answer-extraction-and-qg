@@ -8,6 +8,8 @@ from models import T5FineTuner
 import argparse
 import json
 import torch
+import time
+import sys
 import random
 random.seed(42)
 
@@ -33,7 +35,7 @@ def run(args):
     # Put model in gpu (if possible) or cpu (if not possible) for inference purpose
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     qgmodel = qgmodel.to(device)
-    print ("Device for inference: ",device)
+    print ("Device for inference:", device)
 
     # Put model in freeze() and eval() model. Not sure the purpose of freeze
     qgmodel.freeze()
@@ -48,13 +50,16 @@ def run(args):
     with open("../output/answers/" + args.paragraphs_answers_path + "paragraphs_answers.json", encoding='utf-8') as file:
         paragraphs_answers = json.load(file)
 
-    #paragraphs_answers = random.sample(paragraphs_answers, 15) # to remove!!!!!!!!!!!!!!!!!
+    #paragraphs_answers = random.sample(paragraphs_answers, 50) # to remove!!!!!!!!!!!!!!!!!
+
+    start_time_train = time.time()
 
     # Generate questions
     printcounter = 0
     paragraphs_answers_questions = []
+    print("Number of paragraphs:", len(paragraphs_answers))
     for elem in paragraphs_answers:
-        questions = agent_gen.generate(elem['paragraph_text'], elem['answer_text'], args.max_len_input, args.max_len_output, args.num_beams, args.num_return_sequences)
+        questions = agent_gen.generate(elem['paragraph_text'], elem['answer_text'], args.max_len_input, args.max_len_output, args.num_beams, args.num_return_sequences, device)
         for quest in questions:
             paragraphs_answers_questions.append(
                 {'paragraph_id': elem['paragraph_id'], 
@@ -69,6 +74,9 @@ def run(args):
             printcounter = 0
         printcounter += 1
 
+    end_time_train = time.time()
+    train_total_time = end_time_train - start_time_train
+    print("Inference time: ", train_total_time)
     # Save paragraphs and answers to json file
 
     #https://stackoverflow.com/questions/273192/how-can-i-safely-create-a-nested-directory
@@ -91,7 +99,7 @@ if __name__ == '__main__':
     parser.add_argument('-cp','--checkpoint_path', type=str, metavar='', default="../models_checkpoints/best-checkpoint.ckpt", required=False, help='Model checkpoint path.')
 
     parser.add_argument('-pp','--paragraphs_path', type=str, metavar='', default="../data/paragraphs.json", required=False, help='Paragraphs path.')
-    parser.add_argument('-pap','--paragraphs_answers_path', type=str, metavar='', default="ner/2022-01-06_17-08-08/", required=False, help='Paragraphs and answers path.')
+    parser.add_argument('-pap','--paragraphs_answers_path', type=str, metavar='', default="bert/2022-01-07_16-22-33/", required=False, help='Paragraphs and answers path.')
 
     parser.add_argument('-bs','--batch_size', type=int, default=32, metavar='', required=False, help='Batch size.')
     parser.add_argument('-mli','--max_len_input', type=int, metavar='', default=512, required=False, help='Max len input for encoding.')
