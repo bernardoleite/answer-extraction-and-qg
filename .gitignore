@@ -1,5 +1,6 @@
 *.ckpt
 *.DS_Store
+spacy-clausie-dev-clausie-reimplementation/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

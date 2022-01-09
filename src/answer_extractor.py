@@ -1,6 +1,13 @@
 import sys
 sys.path.append('../')
 
+from collections import Counter
+import nltk
+from nltk import ngrams
+
+import spacy
+import claucy
+
 from keybert import KeyBERT
 import stanza
 import random
@@ -55,3 +62,54 @@ class NerAnswerExtractor:
 
     def getAgentType(self):
         return 'ner'
+
+class NgramExtractor:
+    def __init__(self, agent_name):
+        self.agent_name = agent_name
+
+    #https://stackoverflow.com/questions/42373747/is-there-a-more-efficient-way-to-find-most-common-n-grams
+    #https://stackoverflow.com/questions/17531684/n-grams-in-python-four-five-six-grams
+    def extract_answers(self, text, max_answers):
+        ngram_counts = Counter(ngrams(text.split(), 3))
+        result_top = ngram_counts.most_common(10)
+        print(result_top)
+        sys.exit()
+        return result_top
+
+    def getAgentType(self):
+        return 'ngram'
+
+
+class ClausieExtractor:
+    def __init__(self, agent_name):
+        self.agent_name = agent_name
+        self.nlp = spacy.load('en_core_web_sm')
+        claucy.add_to_pipe(self.nlp) 
+
+    def extract_answers(self, text, max_answers):
+        sentences = nltk.sent_tokenize(text)
+        all_clauses = []
+        for sent in sentences:
+            doc = self.nlp(sent)
+            num_clauses = len(doc._.clauses)
+
+            idx = 0
+            while idx <= num_clauses:
+                propositions = -1
+                try:
+                    propositions = doc._.clauses[idx].to_propositions(as_text=True)
+                except:
+                    pass
+                if isinstance(propositions, list):
+                    all_clauses.extend(propositions)
+                idx = idx + 1
+
+        if len(all_clauses) <= max_answers:
+            return all_clauses
+        else:
+            return random.sample(all_clauses, max_answers)
+
+    def getAgentType(self):
+        return 'clausie'
+
+

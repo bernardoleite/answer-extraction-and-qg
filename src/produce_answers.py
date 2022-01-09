@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../')
 
-from answer_extractor import KeyBERTAnswerExtractor, NerAnswerExtractor
+from answer_extractor import KeyBERTAnswerExtractor, NerAnswerExtractor, NgramExtractor, ClausieExtractor
 
 from utils import currentdate
 import argparse
@@ -13,9 +13,13 @@ random.seed(42)
 def run(args):
     # Create agents for answers extraction
     if args.answer_agent == "ner":
-        answer_agent = NerAnswerExtractor("agent_2")
+        answer_agent = NerAnswerExtractor("ner")
     elif args.answer_agent == "bert":
-        answer_agent = KeyBERTAnswerExtractor("agent_1")
+        answer_agent = KeyBERTAnswerExtractor("bert")
+    elif args.answer_agent == "clausie":
+        answer_agent = ClausieExtractor("clausie")
+    elif args.answer_agent == "ngram":
+        answer_agent = NgramExtractor("ngram")
     else:
         print("No agent selected.")
         sys.exit()
@@ -39,6 +43,19 @@ def run(args):
         # agent KeyBert
         elif answer_agent.getAgentType() == 'bert':
             answers = answer_agent.extract_answers(para['paragraph_text'], ngram_range=(1, 4), stop_words="english", max_answers = args.max_answers)
+            for ans in answers:
+                new_elem = {'paragraph_id': para['paragraph_id'], 'paragraph_text': para['paragraph_text'], 'answer_text': ans[0], 'answer_type': 'bert', 'answer_subtype': 'mmr'}
+                paragraphs_answers.append(new_elem)
+        # agent clausie
+        elif answer_agent.getAgentType() == 'clausie':
+            answers = answer_agent.extract_answers(para['paragraph_text'], max_answers = args.max_answers)
+            for ans in answers:
+                new_elem = {'paragraph_id': para['paragraph_id'], 'paragraph_text': para['paragraph_text'], 'answer_text': ans, 'answer_type': 'clausie', 'answer_subtype': 'clausie'}
+                paragraphs_answers.append(new_elem)
+        # agent ngram ( TODO !!!!)
+        elif answer_agent.getAgentType() == 'ngram':
+            answers = answer_agent.extract_answers(para['paragraph_text'], max_answers = args.max_answers)
+            print(answers)
             for ans in answers:
                 new_elem = {'paragraph_id': para['paragraph_id'], 'paragraph_text': para['paragraph_text'], 'answer_text': ans[0], 'answer_type': 'bert', 'answer_subtype': 'mmr'}
                 paragraphs_answers.append(new_elem)
