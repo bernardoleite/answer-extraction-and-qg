@@ -99,7 +99,7 @@ if __name__ == '__main__':
     parser.add_argument('-cp','--checkpoint_path', type=str, metavar='', default="../models_checkpoints/best-checkpoint.ckpt", required=False, help='Model checkpoint path.')
 
     parser.add_argument('-pp','--paragraphs_path', type=str, metavar='', default="../data/paragraphs.json", required=False, help='Paragraphs path.')
-    parser.add_argument('-pap','--paragraphs_answers_path', type=str, metavar='', default="bert/2022-01-07_16-22-33/", required=False, help='Paragraphs and answers path.')
+    parser.add_argument('-pap','--paragraphs_answers_path', type=str, metavar='', default="clausie/2022-01-09_17-28-03/", required=False, help='Paragraphs and answers path.')
 
     parser.add_argument('-bs','--batch_size', type=int, default=32, metavar='', required=False, help='Batch size.')
     parser.add_argument('-mli','--max_len_input', type=int, metavar='', default=512, required=False, help='Max len input for encoding.')
