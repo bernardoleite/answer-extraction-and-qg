@@ -11,8 +11,8 @@ def run(args):
 
     with open(args.para_answers_questions_path, encoding='utf-8') as file:
         para_answers_questions = json.load(file)
-        #para_answers_questions = para_answers_questions[0:10583] # to be balanced
-
+        para_answers_questions = para_answers_questions[0:10583] # to be balanced
+        
     # first package
     if args.eval_package == "read_1":
         import readability
@@ -77,8 +77,10 @@ if __name__ == '__main__':
     # Add arguments
     parser.add_argument('-ep','--eval_package', type=str, metavar='', default="textstat", required=True, help='Package used for text statistics.')
 
-    parser.add_argument('-paq','--para_answers_questions_path', type=str, metavar='', default="../output/questions/ner/2022-01-06_17-08-08/para_answers_questions.json", required=False, help='Paragraphs and answers path.')
+    #parser.add_argument('-paq','--para_answers_questions_path', type=str, metavar='', default="../output/questions/ner/2022-01-06_17-08-08/para_answers_questions.json", required=False, help='Paragraphs and answers path.')
     #parser.add_argument('-paq','--para_answers_questions_path', type=str, metavar='', default="../output/questions/bert/2022-01-07_16-22-33/para_answers_questions.json", required=False, help='Paragraphs and answers path.')
+    #parser.add_argument('-paq','--para_answers_questions_path', type=str, metavar='', default="../output/questions/clausie/2022-01-09_17-28-03/para_answers_questions.json", required=False, help='Paragraphs and answers path.')
+    parser.add_argument('-paq','--para_answers_questions_path', type=str, metavar='', default="../output/questions/predictions.json", required=False, help='Paragraphs and answers path.')
 
     # Parse arguments
     args = parser.parse_args()
