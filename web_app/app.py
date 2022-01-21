@@ -11,6 +11,14 @@ app = Flask(__name__)
 def index():
     return render_template('home.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
 # Generate Quizz
 @app.route('/gen_quizz', methods=['GET', 'POST'])
 def gen_quizz():
@@ -44,16 +52,13 @@ def gen_quizz():
             clausie_answers = get_answers("clausie", text_gen, max_answers=int(nr_answers), remove_duplicates=False)
             if len(clausie_answers) > 0: extracted_answers.extend(clausie_answers)
 
-        # Get questions
+        # Get questions        
         answers_questions = get_questions(text_gen, extracted_answers)
 
-        for elem in answers_questions:
-            print(elem['gen_question'])
-            print(elem['answer_text'])
-            print("\n")
+        if len(answers_questions) > 0:
+            flash('A new questionnaire was created.', 'success')
+            return render_template('quizz.html', data = [text_gen, answers_questions])
 
-    #flash('You are now registered and can log in.', 'success')
-    #message = 'Por favor, selecione uma ou mais perguntas para geração.'
     #return render_template('gen_quizz.html', success=message)
     return render_template('gen_quizz.html') 
 

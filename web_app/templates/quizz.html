@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Quizz</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/quizz.css" />
+  </head>
+  <body>
+    {% include 'includes/_navbar.html' %}
+    <div class="container">
+
+      {% include 'includes/_messages.html' %}
+
+    <h2 style="text-align:center; font-weight: bold">Text</h2>
+    <div class="row">
+      <div class="column">
+        <div class="card">
+          <p>{{data[0]}}</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="text-align:center; font-weight: bold">Questions from NER Answer Extraction</h2>
+    {% for item in data[1] %}
+
+    {% if item["answer_type"] == "ner"  %}
+      <div class="row">
+        <div class="column">
+          <div class="card">
+            <h5>Question: {{item["gen_question"]}}</h5>
+            <p><i>Answer: {{item["answer_text"]}}</i></p>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% endfor %}
+
+
+    <h2 style="text-align:center; font-weight: bold">Questions from BERT Answer Extraction</h2>
+    {% for item in data[1] %}
+
+    {% if item["answer_type"] == "bert"  %}
+      <div class="row">
+        <div class="column">
+          <div class="card">
+            <h5>Question: {{item["gen_question"]}}</h5>
+            <p><i>Answer: {{item["answer_text"]}}</i></p>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% endfor %}
+
+    <h2 style="text-align:center; font-weight: bold">Questions from Clauses Answer Extraction</h2>
+    {% for item in data[1] %}
+
+    {% if item["answer_type"] == "clausie"  %}
+      <div class="row">
+        <div class="column">
+          <div class="card">
+            <h5>Question: {{item["gen_question"]}}</h5>
+            <p><i>Answer: {{item["answer_text"]}}</i></p>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% endfor %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
