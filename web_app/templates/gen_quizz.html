@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Generate Quizz</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/style.css" />
+  </head>
+  <body>
+    {% include 'includes/_navbar.html' %}
+    <div class ="container">
+        {% include 'includes/_messages.html' %}
+        <h2>Answer Extraction & Question Gen.</h2>
+        <form action="/gen_quizz" method="POST">
+
+        <div class="form-group">
+          <h3>Place your text here</h3>
+          <textarea
+            name="text_gen"
+            id=""
+            cols="30"
+            rows="10"
+            placeholder="Write one or more sentences."
+          ></textarea>
+        </div>
+  
+        <div class="form-group">
+          <h3>Choose your answer extraction agents</h3>
+  
+          <fieldset class="floral">
+
+            <li>
+                  <input type="checkbox" class="familybox cbox"/>
+                  All
+                  <ul>
+                      <li>
+                        <input type="checkbox" class="cbox mainoption" name = "ner" value ="yes"/>
+                        NER
+                      </li>
+                      <li>
+                        <input type="checkbox" class="cbox mainoption" name = "bert" value ="yes"/>
+                        KeyBert
+                      </li>
+                      <li>
+                        <input type="checkbox" class="cbox mainoption" name = "clausie" value ="yes"/>
+                        ClausIE
+                     </li>
+                  </ul>
+              </li>
+        </fieldset>
+  
+        </div>
+  
+        <div class="form-group">
+          <h3>How many <u>answers</u> (per agent) do you want to extract?</h3>
+          <select name="nr_answers">
+            <option value="">Select an option</option>
+            <option value="5">Up to 5 answers.</option>
+            <option value="10">Up to 10 answers.</option>
+            <option value="20">Up to 20 answers.</option>
+          </select>
+        </div>
+          <div class="form-group">
+            <h3>How many <u>questions</u> (per answer) do you want to generate?</h3>
+            <select name="nr_quest">
+              <option value="">Select an option</option>
+              <option value="1">Up to 1 question.</option>
+              <option value="2">Up to 2 questions.</option>
+              <option value="3">Up to 3 questions.</option>
+            </select>
+          </div>
+          <input type="submit"  value="Extract keywords and generate questions" class="btn" onclick="$('#loading').show(); style.display ='none'"/>
+          <div id="loading" style="display:none; text-align:center;"><img sty src="../static/loading.gif" alt="" /></div>
+        </form>
+    </div>
+  </body>
+
+    <script>
+
+    $(document).ready(function () {
+                $.extend($.expr[':'], {
+                    unchecked: function (obj) {
+                        return ((obj.type == 'checkbox' || obj.type == 'radio') && !$(obj).is(':checked'));
+                    }
+                });
+    
+                $(".floral input:checkbox").live('change', function () {
+                    $(this).next('ul').find('input:checkbox').prop('checked', $(this).prop("checked"));
+    
+                    for (var i = $('.floral').find('ul').length - 1; i >= 0; i--) {
+                        $('.floral').find('ul:eq(' + i + ')').prev('input:checkbox').prop('checked', function () {
+                            return $(this).next('ul').find('input:unchecked').length === 0 ? true : false;
+                        });
+                    }
+                });
+            });
+       
+    
+    </script>
+</html>
