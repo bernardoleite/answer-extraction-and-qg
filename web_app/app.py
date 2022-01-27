@@ -53,7 +53,7 @@ def gen_quizz():
             if len(clausie_answers) > 0: extracted_answers.extend(clausie_answers)
 
         # Get questions        
-        answers_questions = get_questions(text_gen, extracted_answers)
+        answers_questions = get_questions(text_gen, extracted_answers, int(nr_quest))
 
         if len(answers_questions) > 0:
             flash('A new questionnaire was created.', 'success')

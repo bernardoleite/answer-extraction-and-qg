@@ -99,7 +99,7 @@ def get_answers(answer_agent_type, text_gen, max_answers, remove_duplicates):
     print("Number of extracted answers:", len(extracted_answers))
     return extracted_answers
 
-def get_questions(text_gen, extracted_answers):
+def get_questions(text_gen, extracted_answers, nr_quest):
     # Create agent for question generation
     args = load_generator_args()
     qgmodel, t5_tokenizer, device = load_generator_model(args)
@@ -110,7 +110,7 @@ def get_questions(text_gen, extracted_answers):
     printcounter = 0
     answers_questions = []
     for elem in extracted_answers:
-        questions = agent_gen.generate(text_gen, elem['answer_text'], args.max_len_input, args.max_len_output, args.num_beams, args.num_return_sequences, device)
+        questions = agent_gen.generate(text_gen, elem['answer_text'], args.max_len_input, args.max_len_output, args.num_beams, nr_quest, device)
         for quest in questions:
             answers_questions.append(
                 {'answer_text': elem['answer_text'], 
