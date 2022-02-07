@@ -69,12 +69,12 @@ Additionaly, this project includes third party software components: [stanza](htt
 
 ## References
 If you use this software in your research/job/work, please kindly cite our project:
-```bash
-@misc{ae_and_qg,
+```bibtex
+@software{ae_and_qg,
   author = {Bernardo Leite},
   title = {Answer Extraction and Question Generation},
   year  = {2022},
-  version = {1.0},
+  version = {1.0.0},
   url   = {https://github.com/bernardoleite/MAS-for-Answer-Extraction-and-QG},
 }
 ```
