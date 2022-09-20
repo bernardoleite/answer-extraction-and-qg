@@ -75,7 +75,7 @@ If you use this software in your research/job/work, please kindly cite our proje
   title = {Answer Extraction and Question Generation},
   year  = {2022},
   version = {1.0.0},
-  url   = {https://github.com/bernardoleite/MAS-for-Answer-Extraction-and-QG},
+  url   = {https://github.com/bernardoleite/answer-extraction-and-qg},
 }
 ```
 
