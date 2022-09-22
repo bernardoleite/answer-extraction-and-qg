@@ -18,11 +18,11 @@ We present a tool capable of (1) extracting question-*worthy* answers from parag
 
 ## Prerequisites
 ```bash
-Python 3
+Python 3 (tested with version 3.9.13 on Windows 10)
 ```
 
 ## Installation
-1. Install the Python packages from [requirements.txt](https://github.com/bernardoleite/MAS-for-Answer-Extraction-and-QG/requirements.txt). If you are using a virtual environment for Python package management, you can install all python packages needed by using the following bash command:
+1. Install the Python packages from [requirements.txt](https://github.com/bernardoleite/answer-extraction-and-qg/blob/main/requirements.txt). If you are using a virtual environment for Python package management, you can install all python packages needed by using the following bash command:
     ```bash
     pip install -r requirements.txt
     ```
@@ -36,16 +36,16 @@ Python 3
     # Optionally
     python setup.py test
     ```
+3. Download this [t5 model checkpoint](https://uporto-my.sharepoint.com/:u:/g/personal/up201404464_up_pt/Ecud90CVa6xHhLPZw1fMo7YB-wGSWtNm3As2TF8ySPPIPw?e=2v5Zep) (for question generation) and save it in the `models_checkpoints` folder (you can create it in the project root)
+
 ## Usage
 1. Web Application
     ```bash
     cd web_app/
     python app.py
     ```
-2. Command Line
-    ```bash
-    TODO
-    ```
+2. Command Line (to be done)
+
 ## Issues and Usage Q&A
 To ask questions, report issues or request features, please use the GitHub Issue Tracker.
 
@@ -61,11 +61,13 @@ If you have a suggestion that would make this better, please fork the repo and c
 5. Open a Pull Request
 
 ## License
+### Project
 This project is released under the **General Public License Version 3.0 (or later)**. For details, please see the file [LICENSE](https://www.gnu.org/licenses/gpl-3.0.txt) in the root directory.
 
 Additionaly, this project includes third party software components: [stanza](https://github.com/stanfordnlp/stanza), [KeyBERT](https://github.com/MaartenGr/KeyBERT), [spacy-clausie](https://github.com/mmxgn/spacy-clausie.git), and [T5](https://github.com/google-research/text-to-text-transfer-transformer) model. Each of these software components have their own license. Please see [stanza/license](https://github.com/stanfordnlp/stanza/blob/main/LICENSE), [KeyBERT/license](https://github.com/MaartenGr/KeyBERT/blob/master/LICENSE), [spacy-clausie/license](https://github.com/mmxgn/spacy-clausie/blob/master/License.txt), and [T5](https://github.com/google-research/text-to-text-transfer-transformer/blob/main/LICENSE) correspondingly.
 
-**Note**: A commercial license may also be available for use in industrial projects and collaborations that do not wish to use the GPL v3 (or later). Please contact the author if you are interested.
+### Commercial Purposes
+A commercial license may also be available for use in industrial projects, collaborations or distributors of proprietary software that do not wish to use an open-source license. Please contact the author if you are interested.
 
 ## References
 If you use this software in your research/job/work, please kindly cite our project:

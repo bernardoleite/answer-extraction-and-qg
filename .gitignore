@@ -2,6 +2,8 @@
 *.DS_Store
 spacy-clausie-dev-clausie-reimplementation/
 spacy-clausie-master/
+data/
+output/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
